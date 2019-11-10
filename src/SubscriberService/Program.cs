@@ -16,6 +16,16 @@ namespace SubscriberService
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) => { services.AddHostedService<Worker>(); });
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddHttpClient("Service1", client =>
+                    {
+                        client.BaseAddress = new Uri("https://api.service.fcbt.com/");
+                        client.DefaultRequestHeaders.Add("Accept", "application/json");
+                        // security stuff
+                    });
+                    
+                    services.AddHostedService<Worker>();
+                });
     }
 }
